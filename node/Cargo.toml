@@ -1,0 +1,23 @@
+[package]
+name = "albert"
+version = "0.0.1"
+authors = ["adoerr"]
+description = "A Substrate node for experimental purposes only!"
+edition = "2018"
+license = "Unlicense"
+build = "build.rs"
+
+[[bin]]
+name = "albert"
+
+[dependencies]
+structopt = "0.3"
+
+sc-cli = { git = "https://github.com/paritytech/substrate.git", branch = "master" }
+
+
+[build-dependencies]
+build-script-utils = { package = "substrate-build-script-utils", version = "2.0" }
+
+[features]
+default = []
