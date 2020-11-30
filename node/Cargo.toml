@@ -14,7 +14,14 @@ name = "albert"
 structopt = "0.3"
 
 sc-cli = { git = "https://github.com/paritytech/substrate.git", branch = "master" }
+sc-service = { git = "https://github.com/paritytech/substrate.git", branch = "master" }
 
+sp-consensus-aura = { git = "https://github.com/paritytech/substrate.git", branch = "master" }
+sp-core = { git = "https://github.com/paritytech/substrate.git", branch = "master" }
+sp-finality-grandpa = { git = "https://github.com/paritytech/substrate.git", branch = "master" }
+sp-runtime = { git = "https://github.com/paritytech/substrate.git", branch = "master" }
+
+albert-runtime = { path = "../runtime" }
 
 [build-dependencies]
 build-script-utils = { package = "substrate-build-script-utils", version = "2.0" }
