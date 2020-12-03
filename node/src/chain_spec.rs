@@ -72,8 +72,10 @@ fn genesis(wasm: &[u8]) -> GenesisConfig {
     let accounts = vec![
         account_id_from_seed::<sr25519::Public>("Alice"),
         account_id_from_seed::<sr25519::Public>("Bob"),
-        account_id_from_seed::<sr25519::Public>("Alice/stash"),
-        account_id_from_seed::<sr25519::Public>("Boc/stash"),
+        account_id_from_seed::<sr25519::Public>("Charlie"),
+        account_id_from_seed::<sr25519::Public>("Allice/stash"),
+        account_id_from_seed::<sr25519::Public>("Bob/stash"),     
+        account_id_from_seed::<sr25519::Public>("Charlie/stash"),
     ];
 
     GenesisConfig {
