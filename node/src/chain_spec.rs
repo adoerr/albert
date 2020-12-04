@@ -74,7 +74,7 @@ fn genesis(wasm: &[u8]) -> GenesisConfig {
         account_id_from_seed::<sr25519::Public>("Bob"),
         account_id_from_seed::<sr25519::Public>("Charlie"),
         account_id_from_seed::<sr25519::Public>("Allice/stash"),
-        account_id_from_seed::<sr25519::Public>("Bob/stash"),     
+        account_id_from_seed::<sr25519::Public>("Bob/stash"),
         account_id_from_seed::<sr25519::Public>("Charlie/stash"),
     ];
 
@@ -109,6 +109,18 @@ mod tests {
             "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY".to_string(),
             pk.to_string()
         );
+
+        let pk = pub_key_from_seed::<sp_core::sr25519::Public>("Bob");
+        assert_eq!(
+            "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty".to_string(),
+            pk.to_string()
+        );
+
+        let pk = pub_key_from_seed::<sp_core::sr25519::Public>("Charlie");
+        assert_eq!(
+            "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y".to_string(),
+            pk.to_string()
+        );
     }
 
     #[test]
@@ -116,6 +128,18 @@ mod tests {
         let id = account_id_from_seed::<sp_core::sr25519::Public>("Alice");
         assert_eq!(
             "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY".to_string(),
+            id.to_string()
+        );
+
+        let id = account_id_from_seed::<sp_core::sr25519::Public>("Bob");
+        assert_eq!(
+            "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty".to_string(),
+            id.to_string()
+        );
+
+        let id = account_id_from_seed::<sp_core::sr25519::Public>("Charlie");
+        assert_eq!(
+            "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y".to_string(),
             id.to_string()
         );
     }
