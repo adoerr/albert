@@ -104,7 +104,7 @@ pub fn new_partial(
 }
 
 /// Bootstrap services for a new full client
-pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
+pub fn new_full(mut config: Configuration) -> Result<TaskManager, ServiceError> {
     let PartialComponents {
         client,
         backend,
@@ -116,6 +116,8 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
         inherent_data_providers,
         other: (block_import, grandpa_link),
     } = new_partial(&config)?;
+
+    config.network.notifications_protocols.push(sc_finality_grandpa::GRANDPA_PROTOCOL_NAME.into());
 
     let (network, network_status_sinks, system_rpc_tx, network_starter) =
         sc_service::build_network(sc_service::BuildNetworkParams {
