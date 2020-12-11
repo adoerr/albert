@@ -141,6 +141,7 @@ parameter_types! {
 impl frame_system::Config for Runtime {
     /// The basic call filter to use in dispatchable.
     type BaseCallFilter = ();
+    /// Block & extrinsics weights: base values and limits.
     type BlockWeights = BlockWeights;
     /// Maximum length of a block (in bytes)
     type BlockLength = BlockLength;
