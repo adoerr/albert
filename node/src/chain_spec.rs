@@ -38,7 +38,7 @@ pub type ChainSpec = sc_service::GenericChainSpec<GenesisConfig>;
 
 /// Chain specification configuration for development
 pub fn dev_config() -> Result<ChainSpec, String> {
-    let wasm = WASM_BINARY.ok_or("Wasm binary development version not available".to_string())?;
+    let wasm = WASM_BINARY.ok_or_else(|| "Wasm binary development version not available".to_string())?;
 
     Ok(ChainSpec::from_genesis(
         // Name
