@@ -56,7 +56,7 @@ pub fn new_partial(
 
     let transaction_pool = sc_transaction_pool::BasicPool::new_full(
         config.transaction_pool.clone(),
-        config.prometheus_registry(),
+        None,
         task_manager.spawn_handle(),
         client.clone(),
     );
@@ -86,7 +86,7 @@ pub fn new_partial(
         client.clone(),
         inherent_data_providers.clone(),
         &task_manager.spawn_handle(),
-        config.prometheus_registry(),
+        None,
         sp_consensus::CanAuthorWithNativeVersion::new(client.executor().clone()),
     )?;
 
@@ -145,7 +145,6 @@ pub fn new_full(mut config: Configuration) -> Result<TaskManager, ServiceError> 
     let backoff_authoring_blocks: Option<()> = None;
     let node_name = config.network.node_name.clone();
     let enable_grandpa = !config.disable_grandpa;
-    let prometheus_registry = config.prometheus_registry().cloned();
     let telemtry_connection_sinks = sc_service::TelemetryConnectionSinks::default();
 
     let rpc_extensions_builder = {
@@ -184,7 +183,7 @@ pub fn new_full(mut config: Configuration) -> Result<TaskManager, ServiceError> 
             task_manager.spawn_handle(),
             client.clone(),
             transaction_pool,
-            prometheus_registry.as_ref(),
+            None,
         );
 
         let can_author_with =
@@ -241,7 +240,7 @@ pub fn new_full(mut config: Configuration) -> Result<TaskManager, ServiceError> 
             network,
             telemetry_on_connect: Some(telemtry_connection_sinks.on_connect_stream()),
             voting_rule: sc_finality_grandpa::VotingRulesBuilder::default().build(),
-            prometheus_registry,
+            prometheus_registry: None,
             shared_voter_state: SharedVoterState::empty(),
         };
 
