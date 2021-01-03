@@ -1,12 +1,9 @@
 use sc_service::ChainType;
-use sp_consensus_aura::sr25519::AuthorityId as AuraId;
 use sp_core::{sr25519, Pair, Public};
-use sp_finality_grandpa::AuthorityId as GrandpaId;
 use sp_runtime::traits::{IdentifyAccount, Verify};
 
 use albert_runtime::{
-    AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig, Signature, SudoConfig,
-    SystemConfig, WASM_BINARY,
+    AccountId, BalancesConfig, GenesisConfig, Signature, SudoConfig, SystemConfig, WASM_BINARY,
 };
 
 /// Generate public key from `seed`.
@@ -26,19 +23,12 @@ where
     AccountPublic::from(pub_key_from_seed::<T>(seed)).into_account()
 }
 
-/// Generate authority keys from `seed` for Aura and GRANDPA
-pub fn authority_keys_from_seed(s: &str) -> (AuraId, GrandpaId) {
-    (
-        pub_key_from_seed::<AuraId>(s),
-        pub_key_from_seed::<GrandpaId>(s),
-    )
-}
-
 pub type ChainSpec = sc_service::GenericChainSpec<GenesisConfig>;
 
 /// Chain specification configuration for development
 pub fn dev_config() -> Result<ChainSpec, String> {
-    let wasm = WASM_BINARY.ok_or_else(|| "Wasm binary development version not available".to_string())?;
+    let wasm =
+        WASM_BINARY.ok_or_else(|| "Wasm binary development version not available".to_string())?;
 
     Ok(ChainSpec::from_genesis(
         // Name
@@ -64,8 +54,6 @@ pub fn dev_config() -> Result<ChainSpec, String> {
 
 /// Genesis configuration
 fn genesis(wasm: &[u8]) -> GenesisConfig {
-    // initial PoA authorities
-    let authorities = vec![authority_keys_from_seed("Alice")];
     // sudo account
     let sudo_key = account_id_from_seed::<sr25519::Public>("Alice");
     // pre-funded accounts
@@ -88,19 +76,13 @@ fn genesis(wasm: &[u8]) -> GenesisConfig {
             // initial account balances
             balances: accounts.iter().cloned().map(|acc| (acc, 1 << 60)).collect(),
         }),
-        pallet_aura: Some(AuraConfig {
-            authorities: authorities.iter().map(|a| (a.0.clone())).collect(),
-        }),
-        pallet_grandpa: Some(GrandpaConfig {
-            authorities: authorities.iter().map(|a| (a.1.clone(), 1)).collect(),
-        }),
         pallet_sudo: Some(SudoConfig { key: sudo_key }),
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{account_id_from_seed, authority_keys_from_seed, pub_key_from_seed};
+    use super::{account_id_from_seed, pub_key_from_seed};
 
     #[test]
     fn test_pub_key_from_seed() {
@@ -141,19 +123,6 @@ mod tests {
         assert_eq!(
             "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y".to_string(),
             id.to_string()
-        );
-    }
-
-    #[test]
-    fn test_authority_keys_from_seed() {
-        let ids = authority_keys_from_seed("Alice");
-        assert_eq!(
-            "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY".to_string(),
-            ids.0.to_string()
-        );
-        assert_eq!(
-            "5FA9nQDVg267DEd8m1ZypXLBnvN7SFxYwV7ndqSYGiN9TTpu".to_string(),
-            ids.1.to_string()
         );
     }
 }
