@@ -48,6 +48,9 @@ pub fn new_partial(
     );
 
     let inherent_data_providers = sp_inherents::InherentDataProviders::new();
+    inherent_data_providers
+        .register_provider(sp_timestamp::InherentDataProvider)
+        .map_err(sp_consensus::error::Error::InherentData)?;
 
     let select_chain = sc_consensus::LongestChain::new(backend.clone());
 
