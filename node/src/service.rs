@@ -21,19 +21,16 @@ type FullClient = sc_service::TFullClient<Block, RuntimeApi, Executor>;
 type FullBackend = sc_service::TFullBackend<Block>;
 type FullSelectedChain = sc_consensus::LongestChain<FullBackend, Block>;
 
-pub fn new_partial(
-    config: &Configuration,
-) -> Result<
-    PartialComponents<
-        FullClient,
-        FullBackend,
-        FullSelectedChain,
-        BasicQueue<Block, TransactionFor<FullClient, Block>>,
-        sc_transaction_pool::FullPool<Block, FullClient>,
-        (),
-    >,
-    ServiceError,
-> {
+type ServiceComponents = sc_service::PartialComponents<
+    FullClient,
+    FullBackend,
+    FullSelectedChain,
+    BasicQueue<Block, TransactionFor<FullClient, Block>>,
+    sc_transaction_pool::FullPool<Block, FullClient>,
+    (),
+>;
+
+pub fn new_partial(config: &Configuration) -> Result<ServiceComponents, ServiceError> {
     // create full node initial parts
     let (client, backend, keystore_container, task_manager) =
         sc_service::new_full_parts::<Block, RuntimeApi, Executor>(&config)?;
