@@ -30,6 +30,7 @@ sp-blockchain = { git = "https://github.com/paritytech/substrate.git", branch = 
 sp-consensus = { git = "https://github.com/paritytech/substrate.git", branch = "master" }
 sp-core = { git = "https://github.com/paritytech/substrate.git", branch = "master" }
 sp-inherents = { git = "https://github.com/paritytech/substrate.git", branch = "master" }
+sp-keyring = { git = "https://github.com/paritytech/substrate.git", branch = "master" }
 sp-runtime = { git = "https://github.com/paritytech/substrate.git", branch = "master" }
 sp-timestamp = { git = "https://github.com/paritytech/substrate.git", branch = "master" }
 sp-transaction-pool = { git = "https://github.com/paritytech/substrate.git", branch = "master" }
