@@ -1,6 +1,5 @@
 use std::sync::Arc;
 
-use sc_consensus_manual_seal::InstantSealParams;
 use sc_executor::native_executor_instance;
 use sc_service::{error::Error as ServiceError, Configuration, PartialComponents, TaskManager};
 use sp_api::TransactionFor;
@@ -45,9 +44,6 @@ pub fn new_partial(config: &Configuration) -> Result<ServiceComponents, ServiceE
     );
 
     let inherent_data_providers = sp_inherents::InherentDataProviders::new();
-    inherent_data_providers
-        .register_provider(sp_timestamp::InherentDataProvider)
-        .map_err(sp_consensus::error::Error::InherentData)?;
 
     let select_chain = sc_consensus::LongestChain::new(backend.clone());
 
@@ -80,8 +76,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
         keystore_container,
         select_chain,
         transaction_pool,
-        inherent_data_providers,
-        other: (),
+        ..
     } = new_partial(&config)?;
 
     let (network, network_status_sinks, system_rpc_tx, network_starter) =
@@ -147,21 +142,14 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
             None,
         );
 
-        let instant_seal = sc_consensus_manual_seal::run_instant_seal(InstantSealParams {
-            block_import: client.clone(),
-            env: proposer,
-            client,
-            pool: transaction_pool.pool().clone(),
+        simplex::start_simplex(
+            client.clone(),
             select_chain,
-            consensus_data_provider: None,
-            inherent_data_providers,
-        });
-
-        // the AURA authoring task is considered essential, i.e. if it fails we take down
-        // the service itself as well.
-        task_manager
-            .spawn_essential_handle()
-            .spawn_blocking("instant-seal", instant_seal);
+            client.clone(),
+            proposer,
+            network.clone(),
+            sp_keyring::AccountKeyring::Alice.pair().into(),
+        );
     }
 
     network_starter.start_network();

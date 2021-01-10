@@ -28,7 +28,6 @@ sp-version = { git = "https://github.com/paritytech/substrate.git", branch = "ma
 pallet-balances = { git = "https://github.com/paritytech/substrate.git", branch = "master", default-features = false }
 pallet-randomness-collective-flip = { git = "https://github.com/paritytech/substrate.git", branch = "master", default-features = false }
 pallet-sudo = { git = "https://github.com/paritytech/substrate.git", branch = "master", default-features = false }
-pallet-timestamp = { git = "https://github.com/paritytech/substrate.git", branch = "master", default-features = false }
 pallet-transaction-payment = { git = "https://github.com/paritytech/substrate.git", branch = "master", default-features = false }
 pallet-transaction-payment-rpc-runtime-api = { git = "https://github.com/paritytech/substrate.git", branch = "master", default-features = false }
 
@@ -62,7 +61,6 @@ std = [
     "pallet-balances/std",
     "pallet-randomness-collective-flip/std",
     "pallet-sudo/std",
-    "pallet-timestamp/std",
     "pallet-transaction-payment/std",
     "pallet-transaction-payment-rpc-runtime-api/std",
 ]
@@ -74,5 +72,4 @@ runtime-benchmarks = [
 	"frame-system/runtime-benchmarks",
 	"sp-runtime/runtime-benchmarks",    
 	"pallet-balances/runtime-benchmarks",
-	"pallet-timestamp/runtime-benchmarks",
 ]

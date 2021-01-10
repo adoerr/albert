@@ -46,6 +46,9 @@ frame-benchmarking-cli = { git = "https://github.com/paritytech/substrate.git", 
 
 albert-runtime = { path = "../runtime" }
 
+# Simplex block authoring and finalizaton
+simplex = { path = "../../lager/simplex" }
+
 [build-dependencies]
 build-script-utils = { package = "substrate-build-script-utils", version = "2.0" }
 

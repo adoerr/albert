@@ -113,6 +113,7 @@ dependencies = [
  "sc-rpc-api",
  "sc-service",
  "sc-transaction-pool",
+ "simplex",
  "sp-api",
  "sp-block-builder",
  "sp-blockchain",
@@ -142,7 +143,6 @@ dependencies = [
  "pallet-balances",
  "pallet-randomness-collective-flip",
  "pallet-sudo",
- "pallet-timestamp",
  "pallet-transaction-payment",
  "pallet-transaction-payment-rpc-runtime-api",
  "parity-scale-codec",
@@ -3629,24 +3629,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "pallet-timestamp"
-version = "2.0.0"
-source = "git+https://github.com/paritytech/substrate.git?branch=master#712085115cdef4a79a66747338c920d6ba4e479f"
-dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
- "impl-trait-for-tuples",
- "parity-scale-codec",
- "serde",
- "sp-inherents",
- "sp-io",
- "sp-runtime",
- "sp-std",
- "sp-timestamp",
-]
-
-[[package]]
 name = "pallet-transaction-payment"
 version = "2.0.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=master#712085115cdef4a79a66747338c920d6ba4e479f"
@@ -5919,6 +5901,20 @@ dependencies = [
  "num-complex",
  "num-traits",
  "paste",
+]
+
+[[package]]
+name = "simplex"
+version = "0.1.0"
+dependencies = [
+ "derive_more",
+ "futures 0.3.9",
+ "log",
+ "parity-scale-codec",
+ "sp-api",
+ "sp-consensus",
+ "sp-core",
+ "sp-runtime",
 ]
 
 [[package]]
