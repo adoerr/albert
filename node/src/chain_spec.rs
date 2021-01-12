@@ -24,7 +24,7 @@ pub fn dev_config() -> Result<ChainSpec, String> {
         // Telemetry
         None,
         // Protocol Id
-        None,
+        Some("albrt"),
         // Properties
         None,
         // Extensions
