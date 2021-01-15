@@ -44,5 +44,7 @@ pub fn run() -> sc_cli::Result<()> {
     runner.config_mut().prometheus_config = None;
     runner.config_mut().telemetry_endpoints = None;
 
-    runner.run_node_until_exit(|config| async move { service::new_full(config) })
+    runner.run_node_until_exit(|config| async move {
+        service::new_full(config).map_err(sc_cli::Error::Service)
+    })
 }
