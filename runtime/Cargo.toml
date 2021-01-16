@@ -16,6 +16,7 @@ frame-system-rpc-runtime-api = { git = "https://github.com/paritytech/substrate.
 
 sp-api = { git = "https://github.com/paritytech/substrate.git", branch = "master", default-features = false }
 sp-block-builder = { git = "https://github.com/paritytech/substrate.git", branch = "master", default-features = false }
+sp-consensus-aura = { git = "https://github.com/paritytech/substrate.git", branch = "master", default-features = false }
 sp-core = { git = "https://github.com/paritytech/substrate.git", branch = "master", default-features = false }
 sp-inherents = { git = "https://github.com/paritytech/substrate.git", branch = "master", default-features = false }
 sp-offchain = { git = "https://github.com/paritytech/substrate.git", branch = "master", default-features = false }
@@ -25,7 +26,9 @@ sp-std = { git = "https://github.com/paritytech/substrate.git", branch = "master
 sp-transaction-pool = { git = "https://github.com/paritytech/substrate.git", branch = "master", default-features = false }
 sp-version = { git = "https://github.com/paritytech/substrate.git", branch = "master", default-features = false }
 
+pallet-aura = { git = "https://github.com/paritytech/substrate.git", branch = "master", default-features = false }
 pallet-balances = { git = "https://github.com/paritytech/substrate.git", branch = "master", default-features = false }
+pallet-grandpa = { git = "https://github.com/paritytech/substrate.git", branch = "master", default-features = false }
 pallet-randomness-collective-flip = { git = "https://github.com/paritytech/substrate.git", branch = "master", default-features = false }
 pallet-sudo = { git = "https://github.com/paritytech/substrate.git", branch = "master", default-features = false }
 pallet-timestamp = { git = "https://github.com/paritytech/substrate.git", branch = "master", default-features = false }
@@ -59,7 +62,9 @@ std = [
     "sp-std/std",
     "sp-transaction-pool/std",
     "sp-version/std", 
+    "pallet-aura/std",
     "pallet-balances/std",
+    "pallet-grandpa/std", 
     "pallet-randomness-collective-flip/std",
     "pallet-sudo/std",
 	"pallet-timestamp/std",
