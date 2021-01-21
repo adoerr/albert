@@ -47,7 +47,7 @@ type ServiceComponents = sc_service::PartialComponents<
 
 pub fn new_partial(config: &Configuration) -> Result<ServiceComponents, ServiceError> {
     // create full node initial parts
-    let (client, backend, keystore_container, task_manager) =
+    let (client, backend, keystore_container, task_manager, ..) =
         sc_service::new_full_parts::<Block, RuntimeApi, Executor>(&config)?;
 
     let client = Arc::new(client);
@@ -139,7 +139,6 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
     let backoff_authoring_blocks: Option<()> = None;
     let name = config.network.node_name.clone();
     let enable_grandpa = !config.disable_grandpa;
-    let telemetry_connection_sinks = sc_service::TelemetryConnectionSinks::default();
 
     let rpc_extensions_builder = {
         let client = client.clone();
@@ -162,7 +161,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
         keystore: keystore_container.sync_keystore(),
         task_manager: &mut task_manager,
         transaction_pool: transaction_pool.clone(),
-        telemetry_connection_sinks: telemetry_connection_sinks.clone(),
+        telemetry_span: None,
         rpc_extensions_builder,
         on_demand: None,
         remote_blockchain: None,
@@ -233,7 +232,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
             config: grandpa_config,
             link: grandpa_link,
             network,
-            telemetry_on_connect: Some(telemetry_connection_sinks.on_connect_stream()),
+            telemetry_on_connect: None,
             voting_rule: sc_finality_grandpa::VotingRulesBuilder::default().build(),
             prometheus_registry: None,
             shared_voter_state: SharedVoterState::empty(),
