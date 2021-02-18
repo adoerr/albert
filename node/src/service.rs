@@ -169,6 +169,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
         network_status_sinks,
         system_rpc_tx,
         config,
+        telemetry_span: None,
     })?;
 
     if role.is_authority() {
