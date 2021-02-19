@@ -81,7 +81,7 @@ pub fn new_partial(config: &Configuration) -> Result<ServiceComponents, ServiceE
         Some(Box::new(grandpa_block_import.clone())),
         client.clone(),
         inherent_data_providers.clone(),
-        &task_manager.spawn_handle(),
+        &task_manager.spawn_essential_handle(),
         config.prometheus_registry(),
         sp_consensus::CanAuthorWithNativeVersion::new(client.executor().clone()),
     )?;
