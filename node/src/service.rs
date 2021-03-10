@@ -2,7 +2,7 @@ use std::{sync::Arc, time::Duration};
 
 use {
     sc_client_api::ExecutorProvider,
-    sc_consensus_aura::{ImportQueueParams, StartAuraParams},
+    sc_consensus_aura::{ImportQueueParams, SlotProportion, StartAuraParams},
     sc_executor::native_executor_instance,
     sc_finality_grandpa::SharedVoterState,
     sc_service::{error::Error as ServiceError, Configuration, TaskManager},
@@ -202,6 +202,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
                 keystore: keystore_container.sync_keystore(),
                 can_author_with,
                 sync_oracle: network.clone(),
+                block_proposal_slot_portion: SlotProportion::new(0.75),
             },
         )?;
 
