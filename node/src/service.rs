@@ -6,6 +6,7 @@ use {
     sc_executor::native_executor_instance,
     sc_finality_grandpa::SharedVoterState,
     sc_service::{error::Error as ServiceError, Configuration, TaskManager},
+    sc_telemetry::Telemetry,
 };
 
 use sp_consensus_aura::sr25519::AuthorityPair as AuraPair;
@@ -44,13 +45,14 @@ type ServiceComponents = sc_service::PartialComponents<
             AuraPair,
         >,
         sc_finality_grandpa::LinkHalf<Block, FullClient, FullSelectedChain>,
+        Option<Telemetry>,
     ),
 >;
 
 pub fn new_partial(config: &Configuration) -> Result<ServiceComponents, ServiceError> {
     // create full node initial parts
     let (client, backend, keystore_container, task_manager) =
-        sc_service::new_full_parts::<Block, RuntimeApi, Executor>(&config)?;
+        sc_service::new_full_parts::<Block, RuntimeApi, Executor>(&config, None)?;
 
     let client = Arc::new(client);
 
@@ -70,6 +72,7 @@ pub fn new_partial(config: &Configuration) -> Result<ServiceComponents, ServiceE
         client.clone(),
         &(client.clone() as Arc<_>),
         select_chain.clone(),
+        None,
     )?;
 
     let aura_block_import = sc_consensus_aura::AuraBlockImport::<_, _, _, AuraPair>::new(
@@ -90,6 +93,7 @@ pub fn new_partial(config: &Configuration) -> Result<ServiceComponents, ServiceE
             slot_duration: sc_consensus_aura::slot_duration(&*client)?,
             registry: config.prometheus_registry(),
             check_for_equivocation: Default::default(),
+            telemetry: None,
         })?;
 
     Ok(ServiceComponents {
@@ -101,7 +105,7 @@ pub fn new_partial(config: &Configuration) -> Result<ServiceComponents, ServiceE
         select_chain,
         transaction_pool,
         inherent_data_providers,
-        other: (aura_block_import, grandpa_link),
+        other: (aura_block_import, grandpa_link, None),
     })
 }
 
@@ -116,7 +120,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
         select_chain,
         transaction_pool,
         inherent_data_providers,
-        other: (block_import, grandpa_link),
+        other: (block_import, grandpa_link, ..),
     } = new_partial(&config)?;
 
     let (network, network_status_sinks, system_rpc_tx, network_starter) =
@@ -174,7 +178,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
         network_status_sinks,
         system_rpc_tx,
         config,
-        telemetry_span: None,
+        telemetry: None,
     })?;
 
     if role.is_authority() {
@@ -182,6 +186,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
             task_manager.spawn_handle(),
             client.clone(),
             transaction_pool,
+            None,
             None,
         );
 
@@ -202,6 +207,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
                 can_author_with,
                 sync_oracle: network.clone(),
                 block_proposal_slot_portion: SlotProportion::new(0.75),
+                telemetry: None,
             },
         )?;
 
@@ -228,6 +234,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
         observer_enabled: false,
         keystore,
         is_authority: role.is_authority(),
+        telemetry: None,
     };
 
     if enable_grandpa {
@@ -241,10 +248,10 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
             config: grandpa_config,
             link: grandpa_link,
             network,
-            telemetry_on_connect: None,
             voting_rule: sc_finality_grandpa::VotingRulesBuilder::default().build(),
             prometheus_registry: None,
             shared_voter_state: SharedVoterState::empty(),
+            telemetry: None,
         };
 
         // the GRANDPA voter task is considered infallible, i.e.

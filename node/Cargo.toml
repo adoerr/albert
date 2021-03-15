@@ -24,6 +24,7 @@ sc-keystore = { git = "https://github.com/adoerr/substrate.git", branch = "maste
 sc-rpc = { git = "https://github.com/adoerr/substrate.git", branch = "master" }
 sc-rpc-api = { git = "https://github.com/adoerr/substrate.git", branch = "master" }
 sc-service = { git = "https://github.com/adoerr/substrate.git", branch = "master", features = ["wasmtime"] }
+sc-telemetry = { git = "https://github.com/adoerr/substrate.git", branch = "master" }
 sc-transaction-pool = { git = "https://github.com/adoerr/substrate.git", branch = "master" }
 
 sp-api = { git = "https://github.com/adoerr/substrate.git", branch = "master" }
