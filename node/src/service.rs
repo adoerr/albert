@@ -115,7 +115,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
         other: (block_import, grandpa_link, ..),
     } = new_partial(&config)?;
 
-    let (network, network_status_sinks, system_rpc_tx, network_starter) =
+    let (network, system_rpc_tx, network_starter) =
         sc_service::build_network(sc_service::BuildNetworkParams {
             config: &config,
             client: client.clone(),
@@ -167,7 +167,6 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
         on_demand: None,
         remote_blockchain: None,
         backend,
-        network_status_sinks,
         system_rpc_tx,
         config,
         telemetry: None,
@@ -238,7 +237,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
         name: Some(name),
         observer_enabled: false,
         keystore,
-        is_authority: role.is_authority(),
+        local_role: role,
         telemetry: None,
     };
 
