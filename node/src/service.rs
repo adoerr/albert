@@ -42,7 +42,7 @@ type ServiceComponents = sc_service::PartialComponents<
 pub fn new_partial(config: &Configuration) -> Result<ServiceComponents, ServiceError> {
     // create full node initial parts
     let (client, backend, keystore_container, task_manager) =
-        sc_service::new_full_parts::<Block, RuntimeApi, Executor>(&config, None)?;
+        sc_service::new_full_parts::<Block, RuntimeApi, Executor>(config, None)?;
 
     let client = Arc::new(client);
 
@@ -190,7 +190,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
         let aura = sc_consensus_aura::start_aura::<AuraPair, _, _, _, _, _, _, _, _, _, _, _>(
             StartAuraParams {
                 slot_duration,
-                client: client.clone(),
+                client,
                 select_chain,
                 block_import,
                 proposer_factory,
