@@ -212,6 +212,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
                 sync_oracle: network.clone(),
                 justification_sync_link: network.clone(),
                 block_proposal_slot_portion: SlotProportion::new(2f32 / 3f32),
+                max_block_proposal_slot_portion: None,
                 telemetry: None,
             },
         )?;
