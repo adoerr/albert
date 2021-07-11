@@ -11,5 +11,4 @@ A Substrate node template for experimental and development purposes only.
 * No Prometheus and no telemetry
 * No pallet template included. Best used following the [pallet as a crate](https://substrate.dev/docs/en/tutorials/create-a-pallet/) approach
 
-Note that `albert` follows [Substrate](https://github.com/paritytech/substrate) `master`. __However__, instead of Substrate upstream, `albert` follows [this](https://github.com/adoerr/substrate) fork. Reason is that this allows us to follow
-`master` closely while still having some sort of well-known version of Substrate (current head of the fork). 
+Note that `albert` follows [Substrate](https://github.com/paritytech/substrate) `master`. We do check in `Cargo.lock` for a somewhat controlled update process of [Substrate](https://github.com/paritytech/substrate), however.
