@@ -7,9 +7,9 @@ use {
     sc_finality_grandpa::SharedVoterState,
     sc_service::{error::Error as ServiceError, Configuration, TaskManager},
     sc_telemetry::Telemetry,
+    sp_consensus::SlotData,
+    sp_consensus_aura::sr25519::AuthorityPair as AuraPair,
 };
-
-use {sp_consensus::SlotData, sp_consensus_aura::sr25519::AuthorityPair as AuraPair};
 
 use albert_runtime::{self, opaque::Block, RuntimeApi};
 
@@ -30,7 +30,7 @@ type ServiceComponents = sc_service::PartialComponents<
     FullClient,
     FullBackend,
     FullSelectedChain,
-    sp_consensus::DefaultImportQueue<Block, FullClient>,
+    sc_consensus::DefaultImportQueue<Block, FullClient>,
     sc_transaction_pool::FullPool<Block, FullClient>,
     (
         sc_finality_grandpa::GrandpaBlockImport<FullBackend, Block, FullClient, FullSelectedChain>,
