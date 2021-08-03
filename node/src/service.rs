@@ -103,7 +103,7 @@ pub fn new_partial(config: &Configuration) -> Result<ServiceComponents, ServiceE
 }
 
 /// Bootstrap services for a new full client
-pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
+pub fn new_full(mut config: Configuration) -> Result<TaskManager, ServiceError> {
     let ServiceComponents {
         client,
         backend,
@@ -115,6 +115,16 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
         other: (block_import, grandpa_link, ..),
     } = new_partial(&config)?;
 
+    config
+        .network
+        .extra_sets
+        .push(sc_finality_grandpa::grandpa_peers_set_config());
+
+    let warp_sync = Arc::new(sc_finality_grandpa::warp_proof::NetworkProvider::new(
+        backend.clone(),
+        grandpa_link.shared_authority_set().clone(),
+    ));
+
     let (network, system_rpc_tx, network_starter) =
         sc_service::build_network(sc_service::BuildNetworkParams {
             config: &config,
@@ -124,6 +134,7 @@ pub fn new_full(config: Configuration) -> Result<TaskManager, ServiceError> {
             import_queue,
             on_demand: None,
             block_announce_validator_builder: None,
+            warp_sync: Some(warp_sync),
         })?;
 
     if config.offchain_worker.enabled {
