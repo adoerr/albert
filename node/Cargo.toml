@@ -43,7 +43,7 @@ sp-timestamp = { git = "https://github.com/paritytech/substrate.git", branch = "
 substrate-frame-rpc-system = { git = "https://github.com/paritytech/substrate.git", branch = "master" } 
 pallet-transaction-payment-rpc = { git = "https://github.com/paritytech/substrate.git", branch = "master" }
 
-jsonrpc-core = "15.1.0"
+jsonrpc-core = "18.0.0"
 
 # Dependencies for runtime benchmarking
 frame-benchmarking = { git = "https://github.com/paritytech/substrate.git", branch = "master" }
