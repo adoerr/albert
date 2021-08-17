@@ -3,7 +3,6 @@ use std::{sync::Arc, time::Duration};
 use {
     sc_client_api::ExecutorProvider,
     sc_consensus_aura::{ImportQueueParams, SlotProportion, StartAuraParams},
-    sc_executor::native_executor_instance,
     sc_finality_grandpa::SharedVoterState,
     sc_service::{error::Error as ServiceError, Configuration, TaskManager},
     sc_telemetry::Telemetry,
@@ -14,13 +13,6 @@ use {
 use albert_runtime::{self, opaque::Block, RuntimeApi};
 
 pub use sc_executor::NativeExecutor;
-
-native_executor_instance!(
-    pub Executor,
-    albert_runtime::api::dispatch,
-    albert_runtime::native_version,
-    frame_benchmarking::benchmarking::HostFunctions,
-);
 
 type FullClient = sc_service::TFullClient<Block, RuntimeApi, Executor>;
 type FullBackend = sc_service::TFullBackend<Block>;
@@ -38,6 +30,20 @@ type ServiceComponents = sc_service::PartialComponents<
         Option<Telemetry>,
     ),
 >;
+
+pub struct Executor;
+
+impl sc_executor::NativeExecutionDispatch for Executor {
+    type ExtendHostFunctions = frame_benchmarking::benchmarking::HostFunctions;
+
+    fn dispatch(method: &str, data: &[u8]) -> Option<Vec<u8>> {
+        albert_runtime::api::dispatch(method, data)
+    }
+
+    fn native_version() -> sc_executor::NativeVersion {
+        albert_runtime::native_version()
+    }
+}
 
 pub fn new_partial(config: &Configuration) -> Result<ServiceComponents, ServiceError> {
     // create full node initial parts
