@@ -12,9 +12,10 @@ use {
 
 use albert_runtime::{self, opaque::Block, RuntimeApi};
 
-pub use sc_executor::NativeExecutor;
+pub use sc_executor::NativeElseWasmExecutor;
 
-type FullClient = sc_service::TFullClient<Block, RuntimeApi, Executor>;
+type FullClient =
+    sc_service::TFullClient<Block, RuntimeApi, NativeElseWasmExecutor<ExecutorDispatch>>;
 type FullBackend = sc_service::TFullBackend<Block>;
 type FullSelectedChain = sc_consensus::LongestChain<FullBackend, Block>;
 
@@ -31,9 +32,9 @@ type ServiceComponents = sc_service::PartialComponents<
     ),
 >;
 
-pub struct Executor;
+pub struct ExecutorDispatch;
 
-impl sc_executor::NativeExecutionDispatch for Executor {
+impl sc_executor::NativeExecutionDispatch for ExecutorDispatch {
     type ExtendHostFunctions = frame_benchmarking::benchmarking::HostFunctions;
 
     fn dispatch(method: &str, data: &[u8]) -> Option<Vec<u8>> {
@@ -46,9 +47,15 @@ impl sc_executor::NativeExecutionDispatch for Executor {
 }
 
 pub fn new_partial(config: &Configuration) -> Result<ServiceComponents, ServiceError> {
+    let executor = NativeElseWasmExecutor::<ExecutorDispatch>::new(
+        config.wasm_method,
+        config.default_heap_pages,
+        config.max_runtime_instances,
+    );
+
     // create full node initial parts
     let (client, backend, keystore_container, task_manager) =
-        sc_service::new_full_parts::<Block, RuntimeApi, Executor>(config, None)?;
+        sc_service::new_full_parts::<Block, RuntimeApi, _>(config, None, executor)?;
 
     let client = Arc::new(client);
 
